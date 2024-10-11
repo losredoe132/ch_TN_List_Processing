@@ -3,7 +3,9 @@
 ## Setup 
 
 ## Extend Names List
-In the folder `data` there are two json files 
+In the folder `data` there are two json files. If you would like to add a name to one of these list, just add it and follow the formating.
+Names that are present in both list, the script will not assign any gender to the corresponding row.  
+
 
 ## Run 
 Python Version: 3.8.10
