@@ -46,7 +46,7 @@ def normalize_portal_df(df: pd.DataFrame):
                 Datum=df["Datum"],
                 Startzeit=df["Startzeit"],
                 ID=df["Teilnehmer-ID"],
-                Anrede=df["Geschlecht"].map({"male": "M", "female": "W"}),
+                Anrede=df["Geschlecht"].map({"male": "Herr", "female": "Frau"}),
                 Nachname=df["Nachname"],
                 Vorname=df["Vorname"],
                 Geburtsdatum=df["Geburtsdatum"],
