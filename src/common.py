@@ -1,21 +1,22 @@
 from dataclasses import dataclass
-import pandas as pd 
+import pandas as pd
 import re
+import logging
+
 
 @dataclass
 class LaborCSV:
-    Datum:pd.Series
-    Startzeit:pd.Series
-    Geschlecht:pd.Series
-    Geburtsdatum:pd.Series
-    Teilnehmer_ID:pd.Series
-    Firma:pd.Series
-    Frimen_ID:pd.Series
-
+    Datum: pd.Series
+    Startzeit: pd.Series
+    Geschlecht: pd.Series
+    Geburtsdatum: pd.Series
+    Teilnehmer_ID: pd.Series
+    Firma: pd.Series
+    Frimen_ID: pd.Series
 
 
 @dataclass
-class AccountingXLSX: 
+class AccountingXLSX:
     Datum: pd.Series
     Startzeit: pd.Series
     ID: pd.Series

@@ -26,13 +26,12 @@ def normalize_portal_df(df: pd.DataFrame):
 
     adresses = df["Adresse"].apply(parse_adress)
 
-
     df_labor = pd.DataFrame(
         asdict(
             LaborCSV(
                 Datum=df["Datum"],
                 Startzeit=df["Startzeit"],
-                Geschlecht=df["Geschlecht"].map({"male":"M", "female":"W"}),
+                Geschlecht=df["Geschlecht"].map({"male": "M", "female": "W"}),
                 Geburtsdatum=df["Geburtsdatum"],
                 Teilnehmer_ID=df["Teilnehmer-ID"],
                 Firma=df["Firma"],
@@ -47,7 +46,7 @@ def normalize_portal_df(df: pd.DataFrame):
                 Datum=df["Datum"],
                 Startzeit=df["Startzeit"],
                 ID=df["Teilnehmer-ID"],
-                Anrede=df["Geschlecht"].map({"male":"M", "female":"W"}),
+                Anrede=df["Geschlecht"].map({"male": "M", "female": "W"}),
                 Nachname=df["Nachname"],
                 Vorname=df["Vorname"],
                 Geburtsdatum=df["Geburtsdatum"],
