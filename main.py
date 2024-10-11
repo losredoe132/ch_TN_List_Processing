@@ -2,25 +2,34 @@ import pandas as pd
 from pathlib import Path 
 
 import argparse 
+from src.henkel import normalize_henkel
 
-
-
-def create_target_xlsxs(df:pd.DataFrame,target_dir : Path ):
-    # create female table 
-    pass
 
 def load_source_xlsx(path:Path):
     return pd.read_excel(path)
     
-def validate_df(df:pd.DataFrame):
-    expected_cols = ['Date Time', 'Customer Name', 'Customer Email', 'Customer Phone',
+def validate_and_normalize_df(df:pd.DataFrame):
+
+    assert len(df)>0 , f"The Excel seems to be empty"
+
+    expected_cols_bookings = ['Date Time', 'Customer Name', 'Customer Email', 'Customer Phone',
        'Customer Address', 'Staff', 'Staff Name', 'Staff Email', 'Service',
        'Location', 'Duration (mins.)', 'Pricing Type', 'Price', 'Currency',
        'Cc Attendees', 'Signed Up Attendees Count',
        'Text Notifications Enabled', ' Custom Fields', 'Event Type',
        'Booking Id', 'Tracking Data']
-    assert list(df.columns) == expected_cols, f"Columns of the Excel Sheet are not as expected: Expected: {expected_cols}\n Actual: {list(df.columns)}\n"
-    assert len(df)>0 , f"The Excel seems to be empty"
+    
+    if list(df.columns) == expected_cols_bookings:
+        return normalize_henkel(df)
+        # determine_gender by first name
+                
+
+    elif list(df.columns) == expected_cols_something: 
+        pass
+
+    else:
+        raise ValueError(f"expected columns to be {expected_cols_bookings} or {expected_cols_something} but is {list(df.columns)}")
+
 
 
 def main(args):
@@ -28,9 +37,11 @@ def main(args):
     target_dir = source_file.parent
     df = load_source_xlsx(source_file)
 
-    validate_df(df)
+    df_labor = validate_and_normalize_df(df)
+    
+    path_labor_file = target_dir/ (source_file.stem+ "_Labor")
+    df_labor.to_csv(path_labor_file, index=False)
 
-    create_target_xlsxs(df, target_dir=target_dir)
 
 
 if __name__ == "__main__":
