@@ -4,7 +4,8 @@ from pathlib import Path
 import argparse 
 from typing import Tuple
 from src.bookings import normalize_bookings_df, expected_colums_bookings
-
+from src.portal import normalize_portal_df, expected_columns_portal
+import logging
 
 def load_source_xlsx(path:Path):
     return pd.read_excel(path)
@@ -15,13 +16,15 @@ def validate_and_normalize_df(df:pd.DataFrame)-> Tuple[pd.DataFrame, pd.DataFram
 
 
     if list(df.columns) == expected_colums_bookings:
+        logging.info("Matched Source as 'Bookings' Input")
         return normalize_bookings_df(df)                
 
     elif list(df.columns) == expected_columns_portal: 
-        pass
+        logging.info("Matched Source as 'Portal' Input")
+        return normalize_portal_df(df)
 
     else:
-        raise ValueError(f"expected columns to be {expected_colums_bookings} or {expected_cols_something} but is {list(df.columns)}")
+        raise ValueError(f"expected columns to be\n{expected_colums_bookings}\nor\n{expected_columns_portal}\nbut is\n{list(df.columns)}")
 
 
 
@@ -42,6 +45,9 @@ def main(source_file):
 
 
 if __name__ == "__main__":
+
+    logging.basicConfig(level=logging.INFO)
+
     parser = argparse.ArgumentParser(
                     prog='ProgramName',
                     description='What the program does',

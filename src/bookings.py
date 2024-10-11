@@ -2,8 +2,8 @@ import pandas as pd
 from enum import Enum
 import json
 import logging
-from dataclasses import dataclass
-import re
+from dataclasses import asdict
+from src.common import LaborCSV, AccountingXLSX, parse_adress
 
 
 expected_colums_bookings = [
@@ -47,40 +47,6 @@ def load_male_and_female_names_list():
     return firstnames_male, firstnames_female
 
 
-def parse_adress(x: str):
-
-    m = re.match("(.*),\s?([0-9]{4,5})\s?(.*)", x)
-    n = re.match("(.*)\s([0-9]{4,5})\s([a-zA-Z]+)", x)
-    if m:
-        return pd.Series(
-            dict(
-                adress=m.groups()[0].title(),
-                postal_code=m.groups()[1],
-                city=m.groups()[2].title(),
-                original=x,
-            )
-        )
-    elif n:
-        return pd.Series(
-            dict(
-                adress=n.groups()[0].title(),
-                postal_code=n.groups()[1],
-                city=n.groups()[2].title(),
-                original=x,
-            )
-        )
-    else:
-        logging.warning(f"Adress: '{x}' could not be parsed succesfully")
-        return pd.Series(
-            dict(
-                adress="",
-                postal_code="",
-                city="",
-                original=x,
-            )
-        )
-
-
 def normalize_bookings_df(df: pd.DataFrame) -> pd.DataFrame:
     firstnames_male, firstnames_female = load_male_and_female_names_list()
 
@@ -99,35 +65,39 @@ def normalize_bookings_df(df: pd.DataFrame) -> pd.DataFrame:
     adresses = df["Customer Address"].apply(parse_adress)
 
     df_labor = pd.DataFrame(
-        {
-            "Datum": df["Date Time"].dt.strftime("%d.%m.%Y"),
-            "Startzeit": df["Date Time"].dt.time,
-            "Geschlecht": gender,
-            "Geburtsdatum": None,
-            "Teilnehmer-ID": None,
-            "Firma": None,
-            "Frimen-ID": None,
-        }
+        asdict(
+            LaborCSV(
+                Datum=df["Date Time"].dt.strftime("%d.%m.%Y"),
+                Startzeit=df["Date Time"].dt.time,
+                Geschlecht=gender,
+                Geburtsdatum=None,
+                Teilnehmer_ID=None,
+                Firma=None,
+                Frimen_ID=None,
+            )
+        )
     )
 
     df_accounting = pd.DataFrame(
-        {
-            "Datum": df["Date Time"].dt.strftime("%d.%m.%Y"),
-            "Startzeit": df["Date Time"].dt.time,
-            "ID": None,
-            "Anrede": gender.map({"M": "Herr", "W": "Frau"}),
-            "Nachname": name_last,
-            "Vorname": name_first,
-            "Geburtsdatum": None,
-            "Adresse - original": adresses["original"],
-            "Adresse": adresses["adress"],
-            "Postleitzahl": adresses["postal_code"].astype(str),
-            "Ort": adresses["city"],
-            "Email": df["Customer Email"],
-            "Telefonnummer": df["Customer Phone"].astype(str),
-            "Anwesenheit": None,
-            "Kommentar": None,
-        }
+        asdict(
+            AccountingXLSX(
+                Datum=df["Date Time"].dt.strftime("%d.%m.%Y"),
+                Startzeit=df["Date Time"].dt.time,
+                ID=None,
+                Anrede=gender.map({"M": "Herr", "W": "Frau"}),
+                Nachname=name_last,
+                Vorname=name_first,
+                Geburtsdatum=None,
+                Adresse_original=adresses["original"],
+                Adresse=adresses["adress"],
+                Postleitzahl=adresses["postal_code"].astype(str),
+                Ort=adresses["city"],
+                Email=df["Customer Email"],
+                Telefonnummer=df["Customer Phone"].astype(str),
+                Anwesenheit=None,
+                Kommentar=None,
+            )
+        )
     )
 
     return df_labor, df_accounting

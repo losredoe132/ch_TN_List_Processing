@@ -2,13 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: main.py with Arguments",
+            "name": "Python Debugger: main.py with Arguments Booking",
             "type": "debugpy",
             "request": "launch",
             "program": "main.py",
             "console": "integratedTerminal",
             "args": [
                 "-s", "/home/finn/Desktop/TN-Liste_Codierung_AK.xlsx"
+            ]
+        },
+        {
+            "name": "Python Debugger: main.py with Arguments Portal",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-s", "/media/finn/FinnJonasPeper1/Work list_Portal_roh.xlsx" 
             ]
         }
     ]
