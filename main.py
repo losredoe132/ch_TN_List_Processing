@@ -2,45 +2,42 @@ import pandas as pd
 from pathlib import Path 
 
 import argparse 
-from src.henkel import normalize_henkel
+from typing import Tuple
+from src.bookings import normalize_bookings_df, expected_colums_bookings
 
 
 def load_source_xlsx(path:Path):
     return pd.read_excel(path)
     
-def validate_and_normalize_df(df:pd.DataFrame):
+def validate_and_normalize_df(df:pd.DataFrame)-> Tuple[pd.DataFrame, pd.DataFrame]:
 
     assert len(df)>0 , f"The Excel seems to be empty"
 
-    expected_cols_bookings = ['Date Time', 'Customer Name', 'Customer Email', 'Customer Phone',
-       'Customer Address', 'Staff', 'Staff Name', 'Staff Email', 'Service',
-       'Location', 'Duration (mins.)', 'Pricing Type', 'Price', 'Currency',
-       'Cc Attendees', 'Signed Up Attendees Count',
-       'Text Notifications Enabled', ' Custom Fields', 'Event Type',
-       'Booking Id', 'Tracking Data']
-    
-    if list(df.columns) == expected_cols_bookings:
-        return normalize_henkel(df)
-        # determine_gender by first name
-                
 
-    elif list(df.columns) == expected_cols_something: 
+    if list(df.columns) == expected_colums_bookings:
+        return normalize_bookings_df(df)                
+
+    elif list(df.columns) == expected_columns_portal: 
         pass
 
     else:
-        raise ValueError(f"expected columns to be {expected_cols_bookings} or {expected_cols_something} but is {list(df.columns)}")
+        raise ValueError(f"expected columns to be {expected_colums_bookings} or {expected_cols_something} but is {list(df.columns)}")
 
 
 
-def main(args):
-    source_file = Path(args.source_file)
+def main(source_file):
+    source_file = Path(source_file)
     target_dir = source_file.parent
     df = load_source_xlsx(source_file)
 
-    df_labor = validate_and_normalize_df(df)
+    df_labor, df_accounting = validate_and_normalize_df(df)
     
-    path_labor_file = target_dir/ (source_file.stem+ "_Labor")
-    df_labor.to_csv(path_labor_file, index=False)
+    path_labor = target_dir/ (source_file.stem+ "_Labor.csv")
+    df_labor.to_csv(path_labor, index=False)
+
+    path_accounting = target_dir/ (source_file.stem+ "_Buchhaltung.xlsx")
+    df_accounting.to_excel(path_accounting, index=False)
+
 
 
 
@@ -52,7 +49,7 @@ if __name__ == "__main__":
     parser.add_argument("--source-file", "-s")
 
     args = parser.parse_args()
-    main(args)
+    main(source_file = args.source_file)
 
 
 
