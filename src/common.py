@@ -2,12 +2,8 @@ import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Tuple
 
 import pandas as pd
-
-from src.bookings import expected_colums_bookings, normalize_bookings_df
-from src.portal import expected_columns_portal, normalize_portal_df
 
 
 @dataclass
@@ -70,23 +66,6 @@ def parse_adress(x: str):
                 city="",
                 original=x,
             )
-        )
-
-
-def validate_and_normalize_df(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    assert len(df) > 0, "The Excel seems to be empty"
-
-    if list(df.columns) == expected_colums_bookings:
-        logging.info("Matched Source as 'Bookings' Input")
-        return normalize_bookings_df(df)
-
-    elif list(df.columns) == expected_columns_portal:
-        logging.info("Matched Source as 'Portal' Input")
-        return normalize_portal_df(df)
-
-    else:
-        raise ValueError(
-            f"expected columns to be\n{expected_colums_bookings}\nor\n{expected_columns_portal}\nbut is\n{list(df.columns)}"
         )
 
 
