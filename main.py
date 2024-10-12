@@ -1,33 +1,8 @@
-import pandas as pd
+import argparse
+import logging
 from pathlib import Path
 
-import argparse
-from typing import Tuple
-from src.bookings import normalize_bookings_df, expected_colums_bookings
-from src.portal import normalize_portal_df, expected_columns_portal
-import logging
-
-
-def load_source_xlsx(path: Path):
-    return pd.read_excel(path)
-
-
-def validate_and_normalize_df(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-
-    assert len(df) > 0, f"The Excel seems to be empty"
-
-    if list(df.columns) == expected_colums_bookings:
-        logging.info("Matched Source as 'Bookings' Input")
-        return normalize_bookings_df(df)
-
-    elif list(df.columns) == expected_columns_portal:
-        logging.info("Matched Source as 'Portal' Input")
-        return normalize_portal_df(df)
-
-    else:
-        raise ValueError(
-            f"expected columns to be\n{expected_colums_bookings}\nor\n{expected_columns_portal}\nbut is\n{list(df.columns)}"
-        )
+from src.common import load_source_xlsx, validate_and_normalize_df
 
 
 def main(source_file):
@@ -45,7 +20,6 @@ def main(source_file):
 
 
 if __name__ == "__main__":
-
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser(

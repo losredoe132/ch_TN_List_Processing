@@ -1,6 +1,21 @@
 # Cooperate Health 
 
 ## Setup 
+```
+python -m venv .venv
+
+# UNIX only
+source .venv/bin/activate
+
+# WINDOWS only
+.\.venv\Scripts\activate
+
+pip install requirements/requirements.txt
+
+# development only
+pip install requirements/dev.txt 
+```
+
 
 ## Extend Names List
 In the folder `data` there are two json files. If you would like to add a name to one of these list, just add it and follow the formating.

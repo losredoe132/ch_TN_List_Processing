@@ -1,6 +1,8 @@
-import pandas as pd
 from dataclasses import asdict
-from src.common import LaborCSV, AccountingXLSX, parse_adress
+
+import pandas as pd
+
+from src.common import AccountingXLSX, LaborCSV, parse_adress
 
 expected_columns_portal = [
     "Datum",
@@ -23,7 +25,6 @@ expected_columns_portal = [
 
 
 def normalize_portal_df(df: pd.DataFrame):
-
     adresses = df["Adresse"].apply(parse_adress)
 
     df_labor = pd.DataFrame(
