@@ -63,7 +63,7 @@ def normalize_bookings_df(df: pd.DataFrame) -> pd.DataFrame:
         )
     )
 
-    adresses = df["Customer Address"].apply(parse_adress)
+    adresses = df["Customer Address"].astype(str).apply(parse_adress)
 
     df_labor = pd.DataFrame(
         asdict(
