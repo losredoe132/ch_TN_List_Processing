@@ -2,7 +2,7 @@ from dataclasses import asdict
 
 import pandas as pd
 
-from src.common import AccountingXLSX, LaborCSV, parse_adress
+from src.common import AccountingXLSX, LaborCSV, OutputFileContainer, parse_adress
 
 expected_columns_portal = [
     "Datum",
@@ -24,7 +24,7 @@ expected_columns_portal = [
 ]
 
 
-def normalize_portal_df(df: pd.DataFrame):
+def normalize_portal_df(df: pd.DataFrame) -> OutputFileContainer:
     adresses = df["Adresse"].apply(parse_adress)
 
     df_labor = pd.DataFrame(
@@ -63,4 +63,4 @@ def normalize_portal_df(df: pd.DataFrame):
         )
     )
 
-    return df_labor, df_accounting
+    return OutputFileContainer(labor=df_labor, accounting=df_accounting)

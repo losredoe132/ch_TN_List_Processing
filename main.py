@@ -1,16 +1,15 @@
 import argparse
 import logging
 from pathlib import Path
-from typing import Tuple
 
 import pandas as pd
 
 from src.bookings import expected_colums_bookings, normalize_bookings_df
-from src.common import load_source_xlsx
+from src.common import OutputFileContainer, load_source
 from src.portal import expected_columns_portal, normalize_portal_df
 
 
-def validate_and_normalize_df(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def validate_and_normalize_df(df: pd.DataFrame) -> OutputFileContainer:
     assert len(df) > 0, "The Excel seems to be empty"
 
     if list(df.columns) == expected_colums_bookings:
@@ -30,12 +29,20 @@ def validate_and_normalize_df(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFr
 def main(source_file):
     source_file = Path(source_file)
     target_dir = source_file.parent
-    df = load_source_xlsx(source_file)
+    df = load_source(source_file)
 
-    df_labor, df_accounting = validate_and_normalize_df(df)
+    output_dfs = validate_and_normalize_df(df)
 
-    path_labor = target_dir / (source_file.stem + "_Labor.csv")
-    df_labor.to_csv(path_labor, index=False)
+    df_accounting = output_dfs.accounting
+    df_labor = output_dfs.labor
+    df_labor_male = df_labor[df_labor["Geschlecht"] == "M"]
+    df_labor_female = df_labor[df_labor["Geschlecht"] == "W"]
+
+    path_labor = target_dir / (source_file.stem + "_Labor_M.csv")
+    df_labor_male.to_csv(path_labor, index=False)
+
+    path_labor = target_dir / (source_file.stem + "_Labor_F.csv")
+    df_labor_female.to_csv(path_labor, index=False)
 
     path_accounting = target_dir / (source_file.stem + "_Buchhaltung.xlsx")
     df_accounting.to_excel(path_accounting, index=False)

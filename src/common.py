@@ -69,5 +69,17 @@ def parse_adress(x: str):
         )
 
 
-def load_source_xlsx(path: Path):
-    return pd.read_excel(path)
+def load_source(path: Path):
+    suffix = path.suffix
+    if suffix == ".xlsx":
+        return pd.read_excel(path)
+    elif suffix == ".tsv":
+        return pd.read_csv(path, sep="\t")
+    else:
+        raise NotImplementedError(f"file of type {suffix} can not be processed.")
+
+
+@dataclass
+class OutputFileContainer:
+    labor: pd.DataFrame
+    accounting: pd.DataFrame
