@@ -28,6 +28,11 @@ def validate_and_normalize_df(df: pd.DataFrame) -> OutputFileContainer:
 
 def main(source_file):
     source_file = Path(source_file)
+    assert (
+        len(source_file.name) < 250
+    ), f"""Length of source path is {len(source_file.name)} >250!. 
+    On windows this is too long to be saved as target. Move this directory to a shorter path."""
+
     target_dir = source_file.parent
     df = load_source(source_file)
 
