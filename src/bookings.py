@@ -119,6 +119,7 @@ def normalize_bookings_df(df: pd.DataFrame) -> OutputFileContainer:
 def get_gender_by_firstname(row, firstnames_male, firstnames_female):
     input_msg = "  Please type:\n  M/m for male\n  F/w for female."
     firstname = row["Vorname"]
+    lastname = row["Nachname"]
 
     if (firstname in firstnames_male) and (firstname not in firstnames_female):
         logging.debug(f"Determine {firstname} as MALE")
@@ -126,6 +127,11 @@ def get_gender_by_firstname(row, firstnames_male, firstnames_female):
     elif (firstname in firstnames_female) and (firstname not in firstnames_male):
         logging.debug(f"Determine {firstname} as FEMALE")
         return Gender.FEMALE.value
+    elif (firstname == "") and (lastname in ["Block", "Blocker"]):
+        logging.warning(
+            f"Determine firstname: {firstname} lastname: {lastname} as MALE"
+        )
+        return Gender.MALE.value
     else:
         logging.warning(
             f"Can not determine gender of:\n{row['Vorname']}\n{row['Nachname']}\n{row['Customer Email']}"

@@ -46,6 +46,7 @@ def main(source_file):
 
     path_accounting = target_dir / (source_file.stem + "_Buchhaltung.xlsx")
     df_accounting.to_excel(path_accounting, index=False)
+    logging.info("Finished successfully")
 
 
 if __name__ == "__main__":
