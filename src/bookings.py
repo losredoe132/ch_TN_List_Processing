@@ -145,13 +145,15 @@ def get_gender_by_firstname(row, firstnames_male, firstnames_female):
 
 
 def get_teilnehmerid(row: pd.Series):
-    print("-" * 100)
-    print(row[["Vorname", "Nachname", "Customer Email", "Customer Address"]])
-    # validate
-    try_count = 0
-    while try_count < 3:
-        i = input("Please insert the TeilnehmerID and press enter:\n")
+    return 0
 
-        if len(str(i)) == 6 and (i.isnumeric()):
-            return i
-        print(f"Invalid TeilnehmerID {i}. Has to be 6 numeric chars. Try again...")
+    # print("-" * 100)
+    # print(row[["Vorname", "Nachname", "Customer Email", "Customer Address"]])
+    # # validate
+    # try_count = 0
+    # while try_count < 3:
+    # i = input("Please insert the TeilnehmerID and press enter:\n")
+
+    # if len(str(i)) == 6 and (i.isnumeric()):
+    # return i
+    # print(f"Invalid TeilnehmerID {i}. Has to be 6 numeric chars. Try again...")
