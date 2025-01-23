@@ -9,6 +9,7 @@ from src.common import AccountingXLSX, LaborCSV, OutputFileContainer, parse_adre
 
 expected_colums_bookings = [
     "Date Time",
+    "teilnehmerid",
     "Customer Name",
     "Customer Email",
     "Customer Phone",
@@ -29,7 +30,6 @@ expected_colums_bookings = [
     "Event Type",
     "Booking Id",
     "Tracking Data",
-    "teilnehmerid",
 ]
 
 
