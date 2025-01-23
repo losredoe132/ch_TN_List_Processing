@@ -29,6 +29,7 @@ expected_colums_bookings = [
     "Event Type",
     "Booking Id",
     "Tracking Data",
+    "teilnehmerid",
 ]
 
 
@@ -61,12 +62,7 @@ def normalize_bookings_df(df: pd.DataFrame) -> OutputFileContainer:
         lambda x: x.strip().split(" ")[-1].title()
     )
 
-    df["teilnehmerid"] = df.apply(
-        lambda row: get_teilnehmerid(
-            row,
-        ),
-        axis=1,
-    )
+    df["teilnehmerid"] = df["teilnehmerid"]
 
     df["gender"] = df.apply(
         lambda x: get_gender_by_firstname(
