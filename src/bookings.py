@@ -11,6 +11,7 @@ expected_colums_bookings = [
     "Date Time",
     "teilnehmerid",
     "Customer Name",
+    "geburtsdatum",
     "Customer Email",
     "Customer Phone",
     "Customer Address",
@@ -62,8 +63,6 @@ def normalize_bookings_df(df: pd.DataFrame) -> OutputFileContainer:
         lambda x: x.strip().split(" ")[-1].title()
     )
 
-    df["teilnehmerid"] = df["teilnehmerid"]
-
     df["gender"] = df.apply(
         lambda x: get_gender_by_firstname(
             x, firstnames_male=firstnames_male, firstnames_female=firstnames_female
@@ -79,7 +78,7 @@ def normalize_bookings_df(df: pd.DataFrame) -> OutputFileContainer:
                 Datum=df["Date Time"].dt.strftime("%d.%m.%Y"),
                 Startzeit=df["Date Time"].dt.time,
                 Geschlecht=df["gender"],
-                Geburtsdatum=None,
+                Geburtsdatum=df["geburtsdatum"],
                 Teilnehmer_ID=df["teilnehmerid"],
                 Firma=None,
                 Frimen_ID=None,
