@@ -32,3 +32,7 @@ Start a terminal in the root directory of this repo. And call it like:
 for example: 
 
 `python main.py -s /home/finn/Desktop/TN-Liste_Codierung_AK.xlsx`
+
+
+Run pre-commit manually:
+`pre-commit run --all-files`

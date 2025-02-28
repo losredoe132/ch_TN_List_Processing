@@ -4,26 +4,30 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.bookings import expected_colums_bookings, normalize_bookings_df
+from src.bookings import BookingsInput
 from src.common import OutputFileContainer, load_source
-from src.portal import expected_columns_portal, normalize_portal_df
+from src.portal import PortalInput
+
+# Configure the logger
+logger = logging.getLogger("example_logger")
+logger.setLevel(logging.DEBUG)
 
 
 def validate_and_normalize_df(df: pd.DataFrame) -> OutputFileContainer:
     assert len(df) > 0, "The Excel seems to be empty"
+    bookings_input = BookingsInput(df)
+    portal_input = PortalInput(df)
 
-    if list(df.columns) == expected_colums_bookings:
-        logging.info("Matched Source as 'Bookings' Input")
-        return normalize_bookings_df(df)
-
-    elif list(df.columns) == expected_columns_portal:
-        logging.info("Matched Source as 'Portal' Input")
-        return normalize_portal_df(df)
+    logger.info("Determin input format")
+    if bookings_input.validate_input():
+        logger.info("Matched Source as 'Bookings' Input")
+        return bookings_input.normalize_input()
+    elif portal_input.validate_input():
+        logger.info("Matched Source as 'Portal' Input")
+        return portal_input.normalize_input()
 
     else:
-        raise ValueError(
-            f"expected columns to be\n{expected_colums_bookings}\nor\n{expected_columns_portal}\nbut is\n{list(df.columns)}"
-        )
+        raise ValueError(f"no matching input format for {df.columns}")
 
 
 def main(source_file):
@@ -44,14 +48,14 @@ def main(source_file):
     df_labor_female = df_labor[df_labor["Geschlecht"] == "W"]
 
     path_labor = target_dir / (source_file.stem + "_Labor_M.csv")
-    df_labor_male.to_csv(path_labor, index=False)
+    df_labor_male.to_csv(path_labor, index=False, decimal=",", sep=";")
 
     path_labor = target_dir / (source_file.stem + "_Labor_F.csv")
-    df_labor_female.to_csv(path_labor, index=False)
+    df_labor_female.to_csv(path_labor, index=False, decimal=",", sep=",")
 
     path_accounting = target_dir / (source_file.stem + "_Buchhaltung.xlsx")
     df_accounting.to_excel(path_accounting, index=False)
-    logging.info("Finished successfully")
+    logging.info(f"Finished successfully and saved to {target_dir}")
 
 
 if __name__ == "__main__":

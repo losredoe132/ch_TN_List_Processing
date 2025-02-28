@@ -9,7 +9,7 @@
             "console": "integratedTerminal",
             "args": [
                 "-s",
-                "/home/finn/Desktop/BookingsReportingData - 2025-01-06T073611.771.tsv"
+                "/media/finn/NVIDIA32GB/05.03.2025_Teilnehmerliste_Henkel_Hamburg_test.xlsx"
             ]
         },
         {
