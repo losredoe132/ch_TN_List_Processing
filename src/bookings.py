@@ -54,7 +54,7 @@ class BookingsInput(GenericInput):
         return pd.Series(
             dict(
                 adress=j["Straße & Hausnummer (Rechnungsadresse)"],
-                postal_code=j["PLZ (Rechnungsadresse) "],
+                postal_code=j["PLZ (Rechnungsadresse)"],
                 city=j["Ort (Rechnungsadresse)"],
             )
         )
