@@ -51,7 +51,7 @@ def main(source_file):
     df_labor_male.to_csv(path_labor, index=False, decimal=",", sep=";")
 
     path_labor = target_dir / (source_file.stem + "_Labor_F.csv")
-    df_labor_female.to_csv(path_labor, index=False, decimal=",", sep=",")
+    df_labor_female.to_csv(path_labor, index=False, decimal=",", sep=";")
 
     path_accounting = target_dir / (source_file.stem + "_Buchhaltung.xlsx")
     df_accounting.to_excel(path_accounting, index=False)
