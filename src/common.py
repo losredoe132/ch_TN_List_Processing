@@ -30,6 +30,7 @@ class AccountingXLSX:
     Vorname: pd.Series
     Geburtsdatum: pd.Series
     Adresse: pd.Series
+    Adresse_original: pd.Series
     Postleitzahl: pd.Series
     Ort: pd.Series
     Email: pd.Series
