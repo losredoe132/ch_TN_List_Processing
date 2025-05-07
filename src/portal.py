@@ -41,19 +41,19 @@ class PortalInput(GenericInput):
 
         super().__init__(df, expected_columns, optional_columns)
 
-    def normalize_input(df: pd.DataFrame) -> OutputFileContainer:
-        adresses = df["Adresse"].apply(parse_adress)
+    def normalize_input(self) -> OutputFileContainer:
+        adresses = self.df["Adresse"].apply(parse_adress)
 
         df_labor = pd.DataFrame(
             asdict(
                 LaborCSV(
-                    Datum=df["Datum"],
-                    Startzeit=df["Startzeit"],
-                    Geschlecht=df["Geschlecht"].map({"male": "M", "female": "W"}),
-                    Geburtsdatum=df["Geburtsdatum"],
-                    Teilnehmer_ID=df["Teilnehmer-ID"],
-                    Firma=df["Firma"],
-                    Frimen_ID=df["Firmen-ID"],
+                    Datum=self.df["Datum"],
+                    Startzeit=self.df["Startzeit"],
+                    Geschlecht=self.df["Geschlecht"].map({"male": "M", "female": "W"}),
+                    Geburtsdatum=self.df["Geburtsdatum"],
+                    Teilnehmer_ID=self.df["Teilnehmer-ID"],
+                    Firma=self.df["Firma"],
+                    Frimen_ID=self.df["Firmen-ID"],
                 )
             )
         )
@@ -61,19 +61,21 @@ class PortalInput(GenericInput):
         df_accounting = pd.DataFrame(
             asdict(
                 AccountingXLSX(
-                    Datum=df["Datum"],
-                    Startzeit=df["Startzeit"],
-                    ID=df["Teilnehmer-ID"],
-                    Anrede=df["Geschlecht"].map({"male": "Herr", "female": "Frau"}),
-                    Nachname=df["Nachname"],
-                    Vorname=df["Vorname"],
-                    Geburtsdatum=df["Geburtsdatum"],
+                    Datum=self.df["Datum"],
+                    Startzeit=self.df["Startzeit"],
+                    ID=self.df["Teilnehmer-ID"],
+                    Anrede=self.df["Geschlecht"].map(
+                        {"male": "Herr", "female": "Frau"}
+                    ),
+                    Nachname=self.df["Nachname"],
+                    Vorname=self.df["Vorname"],
+                    Geburtsdatum=self.df["Geburtsdatum"],
                     Adresse_original=None,
                     Adresse=adresses["adress"],
                     Postleitzahl=adresses["postal_code"].astype(str),
                     Ort=adresses["city"],
-                    Email=df["Email"],
-                    Telefonnummer=df["Telefonnummer"],
+                    Email=self.df["Email"],
+                    Telefonnummer=self.df["Telefonnummer"],
                     Anwesenheit=None,
                     Kommentar=None,
                 )
