@@ -9,7 +9,7 @@
             "console": "integratedTerminal",
             "args": [
                 "-s",
-                "/media/finn/NVIDIA32GB/05.03.2025_Teilnehmerliste_Henkel_Hamburg_test.xlsx"
+                "path"
             ]
         },
         {
@@ -20,7 +20,7 @@
             "console": "integratedTerminal",
             "args": [
                 "-s",
-                "/media/finn/FinnJonasPeper1/Work list_Portal_roh.xlsx"
+                "path"
             ]
         }
     ]
